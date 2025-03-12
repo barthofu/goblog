@@ -15,9 +15,10 @@ type User struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 
-	Posts    []Post    `json:"-"`
-	Comments []Comment `json:"-"`
-	Likes    []Post    `json:"-"`
+	Following []*User   `json:"following" gorm:"many2many:user_following;"`
+	Posts     []Post    `json:"posts" gorm:"foreignKey:UserID"`
+	Likes     []Post    `json:"likes" gorm:"many2many:user_likes;"`
+	Comments  []Comment `json:"comments" gorm:"foreignKey:UserID"`
 }
 
 type CreateOrUpdateUserInput struct {
@@ -32,13 +33,13 @@ type CreateOrUpdateUserInput struct {
 
 func GetAllUsers(db *gorm.DB) ([]User, error) {
 	var users []User
-	result := db.Preload("Posts").Preload("Likes").Preload("Comments").Find(&users)
+	result := db.Preload("Following").Preload("Posts").Preload("Likes").Preload("Comments").Find(&users)
 	return users, result.Error
 }
 
 func GetUser(db *gorm.DB, id int) (User, error) {
 	var user User
-	result := db.Preload("Posts").Preload("Likes").Preload("Comments").First(&user, id)
+	result := db.Preload("Following").Preload("Posts").Preload("Likes").Preload("Comments").First(&user, id)
 	return user, result.Error
 }
 
@@ -61,4 +62,14 @@ func GetUserByEmail(db *gorm.DB, email string) (User, error) {
 	var user User
 	result := db.Where("email = ?", email).First(&user)
 	return user, result.Error
+}
+
+func FollowUser(db *gorm.DB, follower *User, following *User) error {
+	err := db.Model(follower).Association("Following").Append(following)
+	return err
+}
+
+func UnfollowUser(db *gorm.DB, follower *User, following *User) error {
+	err := db.Model(follower).Association("Following").Delete(following)
+	return err
 }

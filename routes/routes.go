@@ -1,7 +1,7 @@
 package routes
 
 import (
-	handlers "blog/handlers/private"
+	"blog/handlers"
 	"blog/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -18,13 +18,12 @@ func SetupRoutes(router *gin.Engine) {
 }
 
 func setupPublicRoutes(router *gin.Engine) {
-	// public := router.Group("/api/v1/public")
-	// {
-	// 	public.GET("/me", handlers.Me)
-	// 	public.GET("/health", handlers.HealthHandler)
-	// 	public.POST("/login", handlers.Login)
-	// 	public.POST("/signup", handlers.Signup)
-	// }
+	public := router.Group("/api/v1/public")
+	{
+		public.GET("/me", handlers.Me)
+		public.GET("/health", handlers.HealthCheck)
+		public.POST("/login", handlers.Register)
+	}
 }
 
 func setupProtectedUserRoutes(router *gin.Engine) {
@@ -33,9 +32,12 @@ func setupProtectedUserRoutes(router *gin.Engine) {
 	{
 		usersRoutes.GET("/", handlers.GetAllUsers)
 		usersRoutes.GET("/:id", middlewares.ParseId(), handlers.GetUser)
-		usersRoutes.POST("/", middlewares.ParseId(), handlers.CreateUser)
+		usersRoutes.POST("/", handlers.CreateUser)
 		usersRoutes.PUT("/:id", middlewares.ParseId(), handlers.UpdateUser)
 		usersRoutes.DELETE("/:id", middlewares.ParseId(), handlers.DeleteUser)
+
+		usersRoutes.POST("/:id/follow", middlewares.ParseId(), handlers.FollowUser)
+		usersRoutes.POST("/:id/unfollow", middlewares.ParseId(), handlers.UnfollowUser)
 	}
 }
 

@@ -5,6 +5,10 @@ import (
 	"blog/models"
 )
 
+// ==========================================
+// CRUD functions
+// ==========================================
+
 func CreateUser(email string, firstName string, lastName string) (*models.User, error) {
 	user := &models.User{
 		Email:     email,
@@ -52,5 +56,39 @@ func DeleteUser(id int) error {
 	}
 
 	err = models.DeleteUser(libs.DB, &user)
+	return err
+}
+
+// ==========================================
+// Follow functions
+// ==========================================
+
+func FollowUser(followerID int, followingID int) error {
+	follower, err := models.GetUser(libs.DB, followerID)
+	if err != nil {
+		return err
+	}
+
+	following, err := models.GetUser(libs.DB, followingID)
+	if err != nil {
+		return err
+	}
+
+	err = models.FollowUser(libs.DB, &follower, &following)
+	return err
+}
+
+func UnfollowUser(followerID int, followingID int) error {
+	follower, err := models.GetUser(libs.DB, followerID)
+	if err != nil {
+		return err
+	}
+
+	following, err := models.GetUser(libs.DB, followingID)
+	if err != nil {
+		return err
+	}
+
+	err = models.UnfollowUser(libs.DB, &follower, &following)
 	return err
 }
