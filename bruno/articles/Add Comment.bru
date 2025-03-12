@@ -1,0 +1,21 @@
+meta {
+  name: Add Comment
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/articles/1/comment
+  body: json
+  auth: none
+}
+
+headers {
+  X-User-Email: dev.bartho@gmail.com
+}
+
+body:json {
+  {
+    "content": "Yo !"
+  }
+}

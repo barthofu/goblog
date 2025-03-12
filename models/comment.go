@@ -11,12 +11,17 @@ type Comment struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	Content string  `json:"content"`
+	Content string `json:"content"`
+
 	Article Article `json:"article" gorm:"foreignKey:ArticleID"`
 	User    User    `json:"user" gorm:"foreignKey:UserID"`
 
 	ArticleID uint `json:"article_id"`
 	UserID    uint `json:"user_id"`
+}
+
+type CreateCommentInput struct {
+	Content string `json:"content" binding:"required"`
 }
 
 // =====================

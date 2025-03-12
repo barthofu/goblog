@@ -1,0 +1,19 @@
+meta {
+  name: Create User B.G
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/public/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "dev.bartho@gmail.com",
+    "first_name": "Bartholomé",
+    "last_name": "Gili"
+  }
+}
