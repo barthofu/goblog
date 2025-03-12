@@ -11,12 +11,12 @@ type Comment struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	Content string `json:"content"`
-	Post    Post   `json:"post" gorm:"foreignKey:PostID"`
-	User    User   `json:"user" gorm:"foreignKey:UserID"`
+	Content string  `json:"content"`
+	Article Article `json:"article" gorm:"foreignKey:ArticleID"`
+	User    User    `json:"user" gorm:"foreignKey:UserID"`
 
-	PostID uint `json:"post_id"`
-	UserID uint `json:"user_id"`
+	ArticleID uint `json:"article_id"`
+	UserID    uint `json:"user_id"`
 }
 
 // =====================

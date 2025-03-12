@@ -13,7 +13,7 @@ func GetComment(c *gin.Context) {
 	id := c.Param("id")
 	var comment models.Comment
 
-	if err := libs.DB.Preload("Post").Preload("User").First(&comment, id).Error; err != nil {
+	if err := libs.DB.Preload("Article").Preload("User").First(&comment, id).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Comment not found"})
 		} else {

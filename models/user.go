@@ -16,8 +16,8 @@ type User struct {
 	LastName  string `json:"last_name"`
 
 	Following []*User   `json:"following" gorm:"many2many:user_following;"`
-	Posts     []Post    `json:"posts" gorm:"foreignKey:UserID"`
-	Likes     []Post    `json:"likes" gorm:"many2many:user_likes;"`
+	Articles  []Article `json:"articles" gorm:"foreignKey:UserID"`
+	Likes     []Article `json:"likes" gorm:"many2many:user_likes;"`
 	Comments  []Comment `json:"comments" gorm:"foreignKey:UserID"`
 }
 
@@ -33,13 +33,13 @@ type CreateOrUpdateUserInput struct {
 
 func GetAllUsers(db *gorm.DB) ([]User, error) {
 	var users []User
-	result := db.Preload("Following").Preload("Posts").Preload("Likes").Preload("Comments").Find(&users)
+	result := db.Preload("Following").Preload("Articles").Preload("Likes").Preload("Comments").Find(&users)
 	return users, result.Error
 }
 
 func GetUser(db *gorm.DB, id int) (User, error) {
 	var user User
-	result := db.Preload("Following").Preload("Posts").Preload("Likes").Preload("Comments").First(&user, id)
+	result := db.Preload("Following").Preload("Articles").Preload("Likes").Preload("Comments").First(&user, id)
 	return user, result.Error
 }
 

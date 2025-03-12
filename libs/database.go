@@ -20,7 +20,7 @@ func InitDatabase() {
 	// migrate the schema
 	db.AutoMigrate(
 		&models.Comment{},
-		&models.Post{},
+		&models.Article{},
 		&models.User{},
 	)
 

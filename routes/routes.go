@@ -14,7 +14,7 @@ func SetupRoutes(router *gin.Engine) {
 	setupPublicRoutes(router)
 	setupProtectedUserRoutes(router)
 	setupProtectedCommentRoutes(router)
-	setupProtectedPostRoutes(router)
+	setupProtectedArticleRoutes(router)
 }
 
 func setupPublicRoutes(router *gin.Engine) {
@@ -53,17 +53,17 @@ func setupProtectedCommentRoutes(router *gin.Engine) {
 	}
 }
 
-func setupProtectedPostRoutes(router *gin.Engine) {
-	postsRoutes := router.Group("/api/v1/posts")
-	postsRoutes.Use(middlewares.AuthMiddleware())
+func setupProtectedArticleRoutes(router *gin.Engine) {
+	articlesRoutes := router.Group("/api/v1/articles")
+	articlesRoutes.Use(middlewares.AuthMiddleware())
 	{
-		postsRoutes.GET("/", handlers.GetAllPosts)
-		postsRoutes.GET("/:id", middlewares.ParseId(), handlers.GetPost)
-		postsRoutes.POST("/", handlers.CreatePost)
-		postsRoutes.PUT("/:id", middlewares.ParseId(), handlers.UpdatePost)
-		postsRoutes.DELETE("/:id", middlewares.ParseId(), handlers.DeletePost)
+		articlesRoutes.GET("/", handlers.GetAllArticles)
+		articlesRoutes.GET("/:id", middlewares.ParseId(), handlers.GetArticle)
+		articlesRoutes.POST("/", handlers.CreateArticle)
+		articlesRoutes.PUT("/:id", middlewares.ParseId(), handlers.UpdateArticle)
+		articlesRoutes.DELETE("/:id", middlewares.ParseId(), handlers.DeleteArticle)
 
-		postsRoutes.POST("/:id/like", middlewares.ParseId(), handlers.LikePost)
-		postsRoutes.POST("/:id/unlike", middlewares.ParseId(), handlers.UnlikePost)
+		articlesRoutes.POST("/:id/like", middlewares.ParseId(), handlers.LikeArticle)
+		articlesRoutes.POST("/:id/unlike", middlewares.ParseId(), handlers.UnlikeArticle)
 	}
 }

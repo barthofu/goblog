@@ -12,30 +12,30 @@ import (
 // CRUD Handlers
 // ==========================================
 
-func GetPost(c *gin.Context) {
+func GetArticle(c *gin.Context) {
 	id := c.GetInt("id")
 
-	var post, err = services.GetPost(id)
+	var article, err = services.GetArticle(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, post)
+	c.JSON(http.StatusOK, article)
 }
 
-func GetAllPosts(c *gin.Context) {
-	var posts, err = services.GetAllPosts()
+func GetAllArticles(c *gin.Context) {
+	var articles, err = services.GetAllArticles()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, posts)
+	c.JSON(http.StatusOK, articles)
 }
 
-func CreatePost(c *gin.Context) {
-	var input models.CreateOrUpdatePostInput
+func CreateArticle(c *gin.Context) {
+	var input models.CreateOrUpdateArticleInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -43,36 +43,36 @@ func CreatePost(c *gin.Context) {
 
 	var user = c.MustGet("user").(*models.User)
 
-	post, err := services.CreatePost(input.Title, input.Content, *user)
+	article, err := services.CreateArticle(input.Title, input.Content, *user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, post)
+	c.JSON(http.StatusCreated, article)
 }
 
-func UpdatePost(c *gin.Context) {
+func UpdateArticle(c *gin.Context) {
 	var id = c.GetInt("id")
-	var input models.CreateOrUpdatePostInput
+	var input models.CreateOrUpdateArticleInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	post, err := services.UpdatePost(id, input.Title, input.Content)
+	article, err := services.UpdateArticle(id, input.Title, input.Content)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, post)
+	c.JSON(http.StatusCreated, article)
 }
 
-func DeletePost(c *gin.Context) {
+func DeleteArticle(c *gin.Context) {
 	var id = c.GetInt("id")
 
-	err := services.DeletePost(id)
+	err := services.DeleteArticle(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -85,11 +85,11 @@ func DeletePost(c *gin.Context) {
 // Likes Handlers
 // ==========================================
 
-func LikePost(c *gin.Context) {
+func LikeArticle(c *gin.Context) {
 	var id = c.GetInt("id")
 	var user = c.MustGet("user").(*models.User)
 
-	err := services.LikePost(id, *user)
+	err := services.LikeArticle(id, *user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -98,11 +98,11 @@ func LikePost(c *gin.Context) {
 	c.JSON(http.StatusNoContent, nil)
 }
 
-func UnlikePost(c *gin.Context) {
+func UnlikeArticle(c *gin.Context) {
 	var id = c.GetInt("id")
 	var user = c.MustGet("user").(*models.User)
 
-	err := services.UnlikePost(id, *user)
+	err := services.UnlikeArticle(id, *user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
