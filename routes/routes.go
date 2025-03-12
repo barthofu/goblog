@@ -20,7 +20,6 @@ func SetupRoutes(router *gin.Engine) {
 func setupPublicRoutes(router *gin.Engine) {
 	public := router.Group("/api/v1/public")
 	{
-		public.GET("/me", handlers.Me)
 		public.GET("/health", handlers.HealthCheck)
 		public.POST("/register", handlers.Register)
 	}
@@ -36,6 +35,7 @@ func setupProtectedUserRoutes(router *gin.Engine) {
 		usersRoutes.PUT("/:id", middlewares.ParseId(), handlers.UpdateUser)
 		usersRoutes.DELETE("/:id", middlewares.ParseId(), handlers.DeleteUser)
 
+		usersRoutes.GET("/me", handlers.Me)
 		usersRoutes.POST("/:id/follow", middlewares.ParseId(), handlers.FollowUser)
 		usersRoutes.POST("/:id/unfollow", middlewares.ParseId(), handlers.UnfollowUser)
 	}

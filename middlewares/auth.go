@@ -16,7 +16,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Vérification en base de données
 		var user, err = services.GetUserByEmail(email)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
@@ -24,10 +23,8 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Stocke l'utilisateur dans le contexte Gin
 		c.Set("user", user)
 
-		// Continue l'exécution des handlers
 		c.Next()
 	}
 }
