@@ -32,13 +32,13 @@ type CreateOrUpdateUserInput struct {
 
 func GetAllUsers(db *gorm.DB) ([]User, error) {
 	var users []User
-	result := db.Find(&users)
+	result := db.Preload("Posts").Preload("Likes").Preload("Comments").Find(&users)
 	return users, result.Error
 }
 
 func GetUser(db *gorm.DB, id int) (User, error) {
 	var user User
-	result := db.First(&user, id)
+	result := db.Preload("Posts").Preload("Likes").Preload("Comments").First(&user, id)
 	return user, result.Error
 }
 

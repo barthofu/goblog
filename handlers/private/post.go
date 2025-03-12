@@ -8,6 +8,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ==========================================
+// CRUD Handlers
+// ==========================================
+
 func GetPost(c *gin.Context) {
 	id := c.GetInt("id")
 
@@ -69,6 +73,36 @@ func DeletePost(c *gin.Context) {
 	var id = c.GetInt("id")
 
 	err := services.DeletePost(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusNoContent, nil)
+}
+
+// ==========================================
+// Likes Handlers
+// ==========================================
+
+func LikePost(c *gin.Context) {
+	var id = c.GetInt("id")
+	var user = c.MustGet("user").(*models.User)
+
+	err := services.LikePost(id, *user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusNoContent, nil)
+}
+
+func UnlikePost(c *gin.Context) {
+	var id = c.GetInt("id")
+	var user = c.MustGet("user").(*models.User)
+
+	err := services.UnlikePost(id, *user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

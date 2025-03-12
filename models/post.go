@@ -32,13 +32,13 @@ type CreateOrUpdatePostInput struct {
 
 func GetAllPosts(db *gorm.DB) ([]Post, error) {
 	var posts []Post
-	result := db.Find(&posts)
+	result := db.Preload("Likes").Preload("Comments").Find(&posts)
 	return posts, result.Error
 }
 
 func GetPost(db *gorm.DB, id int) (Post, error) {
 	var post Post
-	result := db.First(&post, id)
+	result := db.Preload("Likes").Preload("Comments").First(&post, id)
 	return post, result.Error
 }
 
@@ -55,4 +55,14 @@ func UpdatePost(db *gorm.DB, post *Post) error {
 func DeletePost(db *gorm.DB, post *Post) error {
 	result := db.Delete(post)
 	return result.Error
+}
+
+func LikePost(db *gorm.DB, post *Post, user *User) error {
+	err := db.Model(post).Association("Likes").Append(user)
+	return err
+}
+
+func UnlikePost(db *gorm.DB, post *Post, user *User) error {
+	err := db.Model(post).Association("Likes").Delete(user)
+	return err
 }

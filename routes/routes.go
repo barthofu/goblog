@@ -61,7 +61,7 @@ func setupProtectedPostRoutes(router *gin.Engine) {
 		postsRoutes.PUT("/:id", middlewares.ParseId(), handlers.UpdatePost)
 		postsRoutes.DELETE("/:id", middlewares.ParseId(), handlers.DeletePost)
 
-		// protected.POST("/:id/like", handlers.LikePost)
-		// protected.POST("/:id/unlike", handlers.UnlikePost)
+		postsRoutes.POST("/:id/like", middlewares.ParseId(), handlers.LikePost)
+		postsRoutes.POST("/:id/unlike", middlewares.ParseId(), handlers.UnlikePost)
 	}
 }

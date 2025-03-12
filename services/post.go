@@ -48,3 +48,23 @@ func DeletePost(id int) error {
 	err = models.DeletePost(libs.DB, &post)
 	return err
 }
+
+func LikePost(id int, user models.User) error {
+	post, err := models.GetPost(libs.DB, id)
+	if err != nil {
+		return err
+	}
+
+	err = models.LikePost(libs.DB, &post, &user)
+	return err
+}
+
+func UnlikePost(id int, user models.User) error {
+	post, err := models.GetPost(libs.DB, id)
+	if err != nil {
+		return err
+	}
+
+	err = models.UnlikePost(libs.DB, &post, &user)
+	return err
+}
