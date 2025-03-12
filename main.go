@@ -25,7 +25,7 @@ func main() {
 	router := gin.Default()
 
 	// add routes
-	routes.SetupPrivateRoutes(router)
+	routes.SetupRoutes(router)
 
 	// run server on port 8080
 	log.Println("Server running on port 8080")

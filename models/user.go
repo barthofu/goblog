@@ -27,7 +27,7 @@ type CreateOrUpdateUserInput struct {
 }
 
 // =====================
-// CRUD functions
+// Repository functions
 // =====================
 
 func GetAllUsers(db *gorm.DB) ([]User, error) {
@@ -55,4 +55,10 @@ func UpdateUser(db *gorm.DB, user *User) error {
 func DeleteUser(db *gorm.DB, user *User) error {
 	result := db.Delete(user)
 	return result.Error
+}
+
+func GetUserByEmail(db *gorm.DB, email string) (User, error) {
+	var user User
+	result := db.Where("email = ?", email).First(&user)
+	return user, result.Error
 }

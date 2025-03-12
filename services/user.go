@@ -21,6 +21,11 @@ func GetUser(id int) (*models.User, error) {
 	return &user, err
 }
 
+func GetUserByEmail(email string) (*models.User, error) {
+	user, err := models.GetUserByEmail(libs.DB, email)
+	return &user, err
+}
+
 func GetAllUsers() ([]models.User, error) {
 	users, err := models.GetAllUsers(libs.DB)
 	return users, err
