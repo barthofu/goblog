@@ -14,6 +14,7 @@ func SetupRoutes(router *gin.Engine) {
 	setupPublicRoutes(router)
 	setupProtectedUserRoutes(router)
 	setupProtectedCommentRoutes(router)
+	setupProtectedPostRoutes(router)
 }
 
 func setupPublicRoutes(router *gin.Engine) {
@@ -50,17 +51,17 @@ func setupProtectedCommentRoutes(router *gin.Engine) {
 	}
 }
 
-// func setupProtectedPostRoutes(router *gin.Engine) {
-// 	protected := router.Group("/api/v1/post")
-// 	protected.Use(middlewares.AuthMiddleware())
-// 	{
-// 		protected.GET("/", handlers.GetPosts)
-// 		protected.GET("/:id", handlers.GetPost)
-// 		protected.POST("/", handlers.CreatePost)
-// 		protected.PUT("/:id", handlers.UpdatePost)
-// 		protected.DELETE("/:id", handlers.DeletePost)
+func setupProtectedPostRoutes(router *gin.Engine) {
+	postsRoutes := router.Group("/api/v1/posts")
+	postsRoutes.Use(middlewares.AuthMiddleware())
+	{
+		postsRoutes.GET("/", handlers.GetAllPosts)
+		postsRoutes.GET("/:id", middlewares.ParseId(), handlers.GetPost)
+		postsRoutes.POST("/", handlers.CreatePost)
+		postsRoutes.PUT("/:id", middlewares.ParseId(), handlers.UpdatePost)
+		postsRoutes.DELETE("/:id", middlewares.ParseId(), handlers.DeletePost)
 
-// 		protected.POST("/:id/like", handlers.LikePost)
-// 		protected.POST("/:id/unlike", handlers.UnlikePost)
-// 	}
-// }
+		// protected.POST("/:id/like", handlers.LikePost)
+		// protected.POST("/:id/unlike", handlers.UnlikePost)
+	}
+}

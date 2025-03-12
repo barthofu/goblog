@@ -11,16 +11,19 @@ type Post struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	Title    string `json:"title"`
-	Content  string `json:"content"`
-	MediaUrl string `json:"media_url"`
-	User     User   `json:"user" gorm:"foreignKey:UserID"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 
-	Views    []User    `json:"views" gorm:"many2many:post_views;"`
 	Likes    []User    `json:"likes" gorm:"many2many:post_likes;"`
 	Comments []Comment `json:"comments" gorm:"foreignKey:PostID"`
+	Author   User      `json:"author" gorm:"foreignKey:UserID"`
 
-	UserID uint `json:"user_id"`
+	UserID uint `json:"-"`
+}
+
+type CreateOrUpdatePostInput struct {
+	Title   string `json:"title" binding:"required"`
+	Content string `json:"content" binding:"required"`
 }
 
 // =====================
@@ -33,7 +36,7 @@ func GetAllPosts(db *gorm.DB) ([]Post, error) {
 	return posts, result.Error
 }
 
-func GetPost(db *gorm.DB, id uint) (Post, error) {
+func GetPost(db *gorm.DB, id int) (Post, error) {
 	var post Post
 	result := db.First(&post, id)
 	return post, result.Error
